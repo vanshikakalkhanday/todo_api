@@ -1,170 +1,219 @@
+Below is a **clean, copy‑paste ready `README.md`** for your project **with JWT authentication**.  
+You can paste this **as‑is** into your `README.md` file.
 
-# Notes / Todo REST API (Django)
+***
 
-A backend REST API built using **Django** and **Django REST Framework** that allows authenticated users to manage their personal notes or todo items.  
-This project demonstrates clean backend architecture, secure API design, and professional development practices.
+```md
+# Notes / Todo REST API (Django + JWT)
 
+This project is a backend REST API built using **Django** and **Django REST Framework**.  
+It allows authenticated users to securely create, view, update, and delete their personal notes or todo items.
 
-## Project Overview
+The application uses **JWT (JSON Web Token) authentication** and follows standard backend development and Git workflow practices.
 
-This application provides a set of secure REST APIs that enable users to:
+---
 
-*   Create notes or todo items
-*   View their own notes
-*   Update existing notes
-*   Delete notes
-*   Access data securely using token‑based authentication
+##  Project Overview
 
-The project is designed as a **backend service** that can later be integrated with a web or mobile frontend.
+The Notes / Todo API provides secure REST endpoints for managing user-specific notes.  
+Each user can access only their own data through authenticated API requests.
 
+The project is designed as a backend service that can later be integrated with a web or mobile frontend.
 
-## Key Features
+---
 
-*   User‑specific notes (each user sees only their own data)
-*   Token‑based authentication
-*   Full CRUD functionality (Create, Read, Update, Delete)
-*   RESTful API design
-*   Django Admin Panel for internal data management
-*   Automated API tests
-*   Clean and scalable project structure
+## Features
 
+- JWT-based authentication (Access & Refresh tokens)
+- User-specific notes (data isolation)
+- Full CRUD operations (Create, Read, Update, Delete)
+- Secure REST APIs
+- Django Admin Panel support
+- Automated API tests
+- Clean and scalable project structure
 
-##  Tech Stack
+---
 
-*   **Python 3**
-*   **Django**
-*   **Django REST Framework**
-*   **SQLite** (development database)
-*   **Token Authentication**
-*   **Postman** (for API testing)
+## Tech Stack
 
+- Python 3
+- Django
+- Django REST Framework
+- djangorestframework-simplejwt
+- SQLite (development database)
+- Postman (API testing)
 
-## Project Structure
+---
 
-    todo_api/
-    │
-    ├── todo_api/              # Project configuration
-    │
-    ├── notes/                 # Notes application
-    │   ├── models.py          # Database models
-    │   ├── serializers.py     # API serializers
-    │   ├── views.py           # API views
-    │   ├── urls.py            # API routes
-    │   ├── tests.py           # Automated tests
-    │
-    ├── manage.py
-    ├── requirements.txt
-    ├── README.md
-    └── .gitignore
+##  Project Structure
 
+```
 
-## Setup Instructions
+todo\_api/
+│
+├── todo\_api/              # Project settings
+│
+├── notes/                 # Notes application
+│   ├── models.py
+│   ├── serializers.py
+│   ├── views.py
+│   ├── urls.py
+│   ├── tests.py
+│
+├── manage.py
+├── requirements.txt
+├── README.md
+└── .gitignore
 
-Follow the steps below to run the project locally.
+````
 
+---
 
-### 1 Clone the Repository
+##  Setup Instructions
 
-    git clone <repository-url>
-    cd todo_api
+### 1️ Clone the Repository
 
+```bash
+git clone <repository-url>
+cd todo_api
+````
+
+***
 
 ### 2️ Create and Activate Virtual Environment
 
-    python -m venv venv
+```bash
+python -m venv venv
+```
 
-**Activate virtual environment**
+**Activate the virtual environment**
 
 **macOS / Linux**
 
-    source venv/bin/activate
+```bash
+source venv/bin/activate
+```
 
 **Windows**
 
-    venv\Scripts\activate
+```bash
+venv\Scripts\activate
+```
 
 
-### 3 Install Dependencies
 
-    pip install -r requirements.txt
+### 3️ Install Dependencies
 
-
-### 4 Run Database Migrations
-
-    python manage.py makemigrations
-    python manage.py migrate
+```bash
+pip install -r requirements.txt
+```
 
 
-### 5 Create Superuser (Admin Account)
 
-    python manage.py createsuperuser
+### 4️ Apply Database Migrations
 
-This user will be used for:
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
 
-*   Admin panel access
-*   Token generation
+***
+
+### 5 Create Superuser (Admin Access)
+
+```bash
+python manage.py createsuperuser
+```
 
 
-### 6 Start the Development Server
 
-    python manage.py runserver 8001
+### 6️ Run Development Server
 
-Server will run at:
+   bash
+python manage.py runserver 8001
+
+
+Application will be available at:
 
     http://127.0.0.1:8001/
 
+***
 
-##  Authentication
+##  Authentication (JWT)
 
-The API uses **token‑based authentication**.
-
-### Generate Token for a User
-
-    python manage.py shell
-
-<!---->
-
-    from django.contrib.auth.models import User
-    from rest_framework.authtoken.models import Token
-
-    user = User.objects.get(username="your_username")
-    token, _ = Token.objects.get_or_create(user=user)
-    print(token.key)
+This project uses **JWT authentication** via `djangorestframework-simplejwt`.
 
 
 
-### Using Token in API Requests
+### Obtain Access & Refresh Token (Login)
 
-Add the following header in Postman or any API client:
+**POST**
 
-    Authorization: Token <your_token_here>
+    /api/token/
+
+**Request Body**
+
+```json
+{
+  "username": "<your_username>",
+  "password": "<your_password>"
+}
+```
+
+**Response**
+
+```json
+{
+  "access": "<access_token>",
+  "refresh": "<refresh_token>"
+}
+```
 
 
+
+### 🔓 Access Secured APIs
+
+Include the **access token** in request headers:
+
+    Authorization: Bearer <access_token>
+
+
+
+### 🔄 Refresh Access Token
+
+**POST**
+
+    /api/token/refresh/
+
+**Request Body**
+   json
+{
+  "refresh": "<refresh_token>"
+}
+
+
+***
 
 ## API Endpoints
 
-| Method | Endpoint           | Description             |
-| ------ | ------------------ | ----------------------- |
-| GET    | `/api/notes/`      | Retrieve all user notes |
-| POST   | `/api/notes/`      | Create a new note       |
-| PUT    | `/api/notes/{id}/` | Update an existing note |
-| DELETE | `/api/notes/{id}/` | Delete a note           |
+| Method | Endpoint              | Description          |
+| ------ | --------------------- | -------------------- |
+| GET    | `/api/notes/`         | Retrieve user notes  |
+| POST   | `/api/notes/`         | Create a new note    |
+| PUT    | `/api/notes/{id}/`    | Update a note        |
+| DELETE | `/api/notes/{id}/`    | Delete a note        |
+| POST   | `/api/token/`         | JWT login            |
+| POST   | `/api/token/refresh/` | Refresh access token |
 
+***
 
+## Testing
 
-## Testing the APIs
+Automated tests are included for API validation.
 
-### Manual Testing
+bash
+python manage.py test
 
-*   APIs are tested using **Postman**
-*   Supports GET, POST, PUT, and DELETE requests
-*   Token authentication is required for all endpoints
-
-### Automated Testing
-
-Automated API tests are included.
-
-    python manage.py test
 
 Tests cover:
 
@@ -180,20 +229,10 @@ Django Admin Panel is available at:
 
     http://127.0.0.1:8001/admin/
 
-The admin panel is used to:
+The admin panel allows:
 
-*   Manage users
-*   View and manage notes
-*   Verify API‑created data
-
-
-
-
-
-
-
-
-
-
+*   User management
+*   Note management
+*   Data verification
 
 
