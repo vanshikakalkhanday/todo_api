@@ -1,9 +1,4 @@
-Below is a **clean, copy‑paste ready `README.md`** for your project **with JWT authentication**.  
-You can paste this **as‑is** into your `README.md` file.
 
-***
-
-```md
 # Notes / Todo REST API (Django + JWT)
 
 This project is a backend REST API built using **Django** and **Django REST Framework**.  
